@@ -1,151 +1,212 @@
-# 📊 Student Performance Classifier
+# Student Performance Classifier
 
-A machine learning project that predicts a student's academic performance as **High, Average, or Low** based on academic, demographic, and related factors.
+A machine learning based application that predicts student performance as **High, Average, or Low** using academic, personal, and learning-related factors.
 
-The project uses the **UCI Student Performance Dataset** and a **Random Forest Classifier** to make predictions.
+The project also provides confidence scores, identifies at-risk students, gives improvement suggestions, supports CSV-based batch prediction, and provides model evaluation visualizations.
 
----
+## Live Demo
 
-## 🎯 Project Objective
+[Open Student Performance Classifier](https://student-performance-classifier-omikakumar.streamlit.app/)
 
-The objective of this project is to build a machine learning model that:
+## Features
 
-- Takes relevant student attributes as input
-- Classifies student performance as **High, Average, or Low**
-- Provides a **confidence score** for the prediction
-- Shows the **factors contributing most to the prediction**
-- Displays a **confusion matrix** for model evaluation
-- Provides an interactive prediction interface using Streamlit
+- Predicts student performance as **High, Average, or Low**
+- Displays prediction **confidence score**
+- Flags students who may be **at risk**
+- Provides **improvement suggestions** based on weaker factors
+- Supports prediction for multiple students through **CSV upload**
+- Shows **confusion matrix** for model evaluation
+- Shows important factors using **feature importance**
+- Includes basic **exploratory data analysis (EDA)**
+- Simple interactive interface using Streamlit
 
----
+## Tech Stack
 
-## ✨ Features
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- Matplotlib
+- Streamlit
+- Joblib
 
-### 1. Performance Classification
-The model classifies students into three categories:
+## Dataset
 
-- **High:** G3 ≥ 15
-- **Average:** 10 ≤ G3 < 15
-- **Low:** G3 < 10
+The project uses the **Student Performance Factors Dataset** containing 6,607 student records and 19 input factors.
 
-Here, G3 represents the final grade in the original dataset and is used to create the target class.
+### Input Factors
 
-### 2. Confidence Score
-The application displays the model's prediction confidence using the predicted class probability.
+- Hours Studied
+- Attendance
+- Parental Involvement
+- Access to Resources
+- Extracurricular Activities
+- Sleep Hours
+- Previous Scores
+- Motivation Level
+- Internet Access
+- Tutoring Sessions
+- Family Income
+- Teacher Quality
+- School Type
+- Peer Influence
+- Physical Activity
+- Learning Disabilities
+- Parental Education Level
+- Distance from Home
+- Gender
 
-### 3. Contributing Factors
-The project uses Random Forest feature importance to show the factors that contribute most to the model's predictions.
+The target variable is based on the student's **Exam Score**.
 
-### 4. Confusion Matrix
-A confusion matrix is generated to evaluate the model's classification performance across the three classes.
+## Performance Classification
 
-### 5. Interactive Interface
-A Streamlit interface allows users to enter student information and receive a prediction.
+Students are classified using the following thresholds:
 
----
+| Exam Score | Performance |
+|---|---|
+| 70 or above | High |
+| 65–69 | Average |
+| Below 65 | Low |
 
-## 🛠️ Tech Stack
+## Machine Learning Approach
 
-- **Python**
-- **Pandas**
-- **NumPy**
-- **Scikit-learn**
-- **Matplotlib**
-- **Seaborn**
-- **Streamlit**
-- **Joblib**
+### 1. Data Preprocessing
 
----
+- Loaded the dataset using Pandas
+- Handled missing values
+- Converted categorical features using One-Hot Encoding
+- Used numerical imputation for numerical features
+- Used a Scikit-learn preprocessing pipeline
 
-## 📂 Project Structure
+### 2. Model
+
+A **Random Forest Classifier** was used for prediction.
+
+The dataset was divided into:
+
+- 80% Training data
+- 20% Testing data
+
+Stratified splitting was used to maintain the class distribution.
+
+### 3. Model Performance
+
+The model achieved an accuracy of approximately:
+
+**84.04%**
+
+Classification results:
+
+| Class | Precision | Recall | F1-Score |
+|---|---:|---:|---:|
+| Average | 0.84 | 0.87 | 0.86 |
+| High | 0.86 | 0.79 | 0.83 |
+| Low | 0.82 | 0.81 | 0.82 |
+
+## Model Evaluation
+
+### Confusion Matrix
+
+The confusion matrix shows how correctly the model classified students across the three performance categories.
+
+![Confusion Matrix](confusion_matrix.png)
+
+### Feature Importance
+
+Feature importance is used to identify which input factors contribute most to the Random Forest model's predictions.
+
+![Feature Importance](feature_importance.png)
+
+## Exploratory Data Analysis
+
+### Performance Distribution
+
+![Performance Distribution](performance_distribution.png)
+
+### Exam Score Distribution
+
+![Exam Score Distribution](exam_score_distribution.png)
+
+## At-Risk Student Detection
+
+The application provides an at-risk indicator based on the predicted performance:
+
+- **Low:** Student may require immediate academic support
+- **Average:** Student may benefit from additional support
+- **High:** Student is not flagged as at-risk
+
+## Improvement Suggestions
+
+The application checks weaker factors and provides simple suggestions such as:
+
+- Increasing study time
+- Improving attendance
+- Strengthening weak academic topics
+- Getting sufficient sleep
+- Considering tutoring or academic support
+- Increasing physical activity
+- Improving motivation and study routine
+- Seeking additional learning resources
+- Building a supportive study environment
+
+## CSV Batch Prediction
+
+The application also allows users to upload a CSV file containing multiple student records.
+
+For each student, the application provides:
+
+- Predicted Performance
+- Confidence Score
+- At-Risk Status
+
+The results can also be downloaded as a CSV file.
+
+## Project Structure
 
 ```text
 student-performance-classifier/
 │
 ├── data/
-│   └── student-mat.csv
+│   ├── StudentPerformanceFactors.csv
+│   └── student_processed.csv
 │
 ├── models/
-│   ├── student_performance_model.pkl
-│   └── preprocessor.pkl
+│   └── student_performance_model.pkl
 │
 ├── src/
+│   ├── dataset_check.py
 │   ├── eda.py
-│   ├── preprocess.py
-│   ├── train.py
 │   ├── evaluate.py
-│   └── predict.py
+│   ├── feature_importance.py
+│   ├── preprocess_new.py
+│   └── train_model.py
 │
 ├── app.py
-├── requirements.txt
-└── README.md
+├── confusion_matrix.png
+├── feature_importance.png
+├── performance_distribution.png
+├── exam_score_distribution.png
+├── README.md
+└── requirements.txt
 
-📊 Dataset
+Challenges and Solutions
 
-The project uses the Student Performance Dataset from the UCI Machine Learning Repository.
+Handling Missing Values
 
-Source:
-https://archive.ics.uci.edu/dataset/320/student+performance
+Some dataset features contained missing values. These were handled using appropriate imputation methods during preprocessing.
 
-The project uses the student-mat.csv dataset, which contains information about students' academic performance and related factors.
+Categorical Features
 
-The dataset contains 395 student records and 33 original attributes, including the final grade G3.
+Several student-related factors were categorical. One-Hot Encoding was used to convert them into numerical representations suitable for machine learning.
 
-For model training:
+Multi-Class Classification
 
-G3 is used to create the target performance class.
-G3 itself is not used as an input feature.
-The remaining 32 attributes are used as model inputs.
-🧠 Model and Approach
-1. Target Creation
+The original exam score was converted into three meaningful performance categories: High, Average, and Low.
 
-The original final grade G3 is converted into three performance classes:
+Model Evaluation
 
-G3 >= 15       → High
-10 <= G3 < 15  → Average
-G3 < 10        → Low
-2. Feature Preparation
+The model was evaluated using accuracy, precision, recall, F1-score, and a confusion matrix.
 
-The dataset contains both numerical and categorical features.
+Project Goal
 
-Categorical features are converted into numerical form using One-Hot Encoding.
-
-Numerical features are passed through without scaling because the selected Random Forest model does not require feature scaling.
-
-3. Train-Test Split
-
-The dataset is divided into:
-
-80% training data
-20% testing data
-
-A stratified split is used to maintain the class distribution between training and testing data.
-
-4. Machine Learning Model
-
-A Random Forest Classifier is used with:
-
-n_estimators = 100
-random_state = 42
-5. Model Performance
-
-The model achieved an accuracy of approximately:
-
-82.28%
-
-on the test dataset.
-
-📈 Evaluation
-
-The model is evaluated using a confusion matrix.
-
-The confusion matrix obtained on the test data is:
-
-              Predicted
-              Low  Average  High
-
-Actual Low     22     4       0
-Actual Average  7    31       0
-Actual High     0     3      12
-
-The model correctly classified 65 out of 79 test samples.
+The goal of this project is to demonstrate how machine learning can be used to analyze student-related factors and provide an understandable performance classification that can support early academic intervention.
